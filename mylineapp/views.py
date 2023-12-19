@@ -28,6 +28,7 @@ def callback(request):
             # 若有訊息事件
             if isinstance(event, MessageEvent):
                 # 回傳收到的文字訊息
+                msg = "你好" + event.message.text
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text=event.message.text))
