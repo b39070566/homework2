@@ -13,8 +13,11 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
 play_nums = False
 ranums = 0
+
 @csrf_exempt
 def callback(request):
+    global play_nums, ranums  # Use the global keyword
+
     if request.method == 'POST':
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
@@ -33,23 +36,23 @@ def callback(request):
                 # 回傳收到的文字訊息
                 if msg == "猜數字":
                     play_nums = True
-                    ranums = random.randint(1,100)
+                    ranums = random.randint(1, 100)
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="猜數字1-100"))
-                elif play_nums == True:
+                elif play_nums:
                     if msg.isdigit():
                         msg = int(msg)
                         if msg > ranums:
                             line_bot_api.reply_message(
-                                vent.reply_token,
+                                event.reply_token,
                                 TextSendMessage(text="小一點"))
                         elif msg < ranums:
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="大一點"))
                         elif msg == ranums:
-                            play_nums = false
+                            play_nums = False
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
@@ -57,11 +60,6 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=event.message.text))
-                            
-
-
-                    
-                    
 
         return HttpResponse()
     else:
