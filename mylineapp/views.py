@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+import random
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
@@ -27,11 +28,39 @@ def callback(request):
         for event in events:
             # 若有訊息事件
             if isinstance(event, MessageEvent):
+                msg = event.message.text
                 # 回傳收到的文字訊息
-                msg = "你好" + event.message.text
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=event.message.text))
+                if msg == "猜數字":
+                    play_nums = true
+                    ranums = random.randint(1,100)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="猜數字1-100"))
+                elif (play_nums) == true:
+                    if msg.isdigit()
+                        msg = int(msg)
+                        if msg > ranums:
+                            line_bot_api.reply_message(
+                                vent.reply_token,
+                                TextSendMessage(text="小一點"))
+                        elif msg < ranums:
+                            line_bot_api.reply_message(
+                                event.reply_token,
+                                TextSendMessage(text="大一點"))
+                        elif msg == ranums:
+                            play_nums = false
+                            line_bot_api.reply_message(
+                                event.reply_token,
+                                TextSendMessage(text="猜中了!"))
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=event.message.text))
+                            
+
+
+                    
+                    
 
         return HttpResponse()
     else:
