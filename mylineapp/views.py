@@ -31,12 +31,12 @@ def callback(request):
                 msg = event.message.text
                 # 回傳收到的文字訊息
                 if msg == "猜數字":
-                    play_nums = true
+                    play_nums = True
                     ranums = random.randint(1,100)
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text="猜數字1-100"))
-                elif (play_nums) == true:
+                elif (play_nums) == True:
                     if msg.isdigit():
                         msg = int(msg)
                         if msg > ranums:
