@@ -37,7 +37,7 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text="猜數字1-100"))
                 elif (play_nums) == true:
-                    if msg.isdigit()
+                    if msg.isdigit():
                         msg = int(msg)
                         if msg > ranums:
                             line_bot_api.reply_message(
