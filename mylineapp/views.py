@@ -8,11 +8,31 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 
+import requests
+from bs4 import BeautifulSoup
+
+
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
 play_nums = False
 ranums = 0
+
+def getInvoice():
+    url = "https://invoice.etax.nat.gov.tw"
+    html = requests.get(url)
+    html.encoding ='uft-8'
+    soup = BeautifulSoup(html.text, 'html.parser')
+
+    period = soup.find("a", class_="etw-on")
+    rr = period.text+"\n"
+
+    nums = soup.find_all("p", class_="etw-tbiggest")
+    rr += "特別獎：" + nums[0].text + "\n"
+    rr += "特獎：" + nums[1].text + "\n"
+    rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
+    return rr
 
 @csrf_exempt
 def callback(request):
@@ -55,7 +75,12 @@ def callback(request):
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
-                elif msg = "喵喵":
+                elif msg == "統一發票":
+                    invoice = getInvoice()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=invoice))
+                elif msg == "喵喵":
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=1, sticker_id=2))
