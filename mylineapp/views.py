@@ -22,7 +22,7 @@ ranums = 0
 def getNews(n=10):
     url = "https://www.cna.com.tw/list/aall.aspx"
     html = requests.get(url)
-    html.encoding ='uft-8'
+    html.encoding ='utf-8'
 
     soup = BeautifulSoup(html.text, 'html.parser')
     # print(soup.title.string.strip())
@@ -55,7 +55,7 @@ def getGasolinePrice():
 def getInvoice():
     url = "https://invoice.etax.nat.gov.tw"
     html = requests.get(url)
-    html.encoding ='uft-8'
+    html.encoding ='utf-8'
     soup = BeautifulSoup(html.text, 'html.parser')
 
     period = soup.find("a", class_="etw-on")
