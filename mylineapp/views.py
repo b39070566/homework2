@@ -16,8 +16,31 @@ from bs4 import BeautifulSoup
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
-play_nums = False
-ranums = 0
+class NumberGuessingGame:
+    def __init__(self):
+        self.playing = False
+        self.target_number = 0
+
+    def start_game(self):
+        self.playing = True
+        self.target_number = random.randint(1, 100)
+        return TextSendMessage(text="猜數字1-100")
+
+    def guess(self, user_input):
+        if not self.playing or not user_input.isdigit():
+            return TextSendMessage(text="請先開始新遊戲")
+
+        user_guess = int(user_input)
+
+        if user_guess > self.target_number:
+            return TextSendMessage(text="小一點")
+        elif user_guess < self.target_number:
+            return TextSendMessage(text="大一點")
+        elif user_guess == self.target_number:
+            self.playing = False
+            return TextSendMessage(text="猜中了!")
+            
+number_guessing_game = NumberGuessingGame()
 
 def getNews(n=10):
     url = "https://www.cna.com.tw/list/aall.aspx"
@@ -67,24 +90,6 @@ def getInvoice():
     rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
     return rr
 
-def start_guess_number():
-    global play_nums, ranums
-    play_nums = True
-    ranums = random.randint(1, 100)
-    return TextSendMessage(text="猜數字1-100")
-
-def guess_number(msg):
-    global play_nums, ranums
-    msg = int(msg)
-
-    if msg > ranums:
-        return TextSendMessage(text="小一點")
-    elif msg < ranums:
-        return TextSendMessage(text="大一點")
-    elif msg == ranums:
-        play_nums = False
-        return TextSendMessage(text="猜中了!")
-
 @csrf_exempt
 def callback(request):
     global play_nums, ranums  # Use the global keyword
@@ -106,11 +111,11 @@ def callback(request):
                 msg = event.message.text
                 # 回傳收到的文字訊息
                 if msg == "猜數字":
-                    reply_message = start_guess_number()
-                    line_bot_api.reply_message(event.reply_token, reply_message)
-                elif play_nums and msg.isdigit():
-                    reply_message = guess_number(msg)
-                    line_bot_api.reply_message(event.reply_token, reply_message)
+                    returned_message = number_guessing_game.start_game()
+                    line_bot_api.reply_message(event.reply_token, returned_message)
+                elif msg.isdigit():
+                    returned_message = number_guessing_game.guess(msg)
+                    line_bot_api.reply_message(event.reply_token, returned_message)
                 elif msg == "統一發票" or msg == "發票":
                     Invoice = getInvoice()
                     line_bot_api.reply_message(
