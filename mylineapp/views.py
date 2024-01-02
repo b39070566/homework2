@@ -6,8 +6,7 @@ import random
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage
-from linebot.models import StickerSendMessage
+from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage
 
 import requests
 from bs4 import BeautifulSoup
