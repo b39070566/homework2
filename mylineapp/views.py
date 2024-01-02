@@ -67,6 +67,24 @@ def getInvoice():
     rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
     return rr
 
+def start_guess_number():
+    global play_nums, ranums
+    play_nums = True
+    ranums = random.randint(1, 100)
+    return TextSendMessage(text="猜數字1-100")
+
+def guess_number(msg):
+    global play_nums, ranums
+    msg = int(msg)
+
+    if msg > ranums:
+        return TextSendMessage(text="小一點")
+    elif msg < ranums:
+        return TextSendMessage(text="大一點")
+    elif msg == ranums:
+        play_nums = False
+        return TextSendMessage(text="猜中了!")
+
 @csrf_exempt
 def callback(request):
     global play_nums, ranums  # Use the global keyword
@@ -88,26 +106,11 @@ def callback(request):
                 msg = event.message.text
                 # 回傳收到的文字訊息
                 if msg == "猜數字":
-                    play_nums = True
-                    ranums = random.randint(1, 100)
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text="猜數字1-100"))
+                    reply_message = start_guess_number()
+                    line_bot_api.reply_message(event.reply_token, reply_message)
                 elif play_nums and msg.isdigit():
-                        msg = int(msg)
-                        if msg > ranums:
-                            line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="小一點"))
-                        elif msg < ranums:
-                            line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="大一點"))
-                        elif msg == ranums:
-                            play_nums = False
-                            line_bot_api.reply_message(
-                                event.reply_token,
-                                TextSendMessage(text="猜中了!"))
+                    reply_message = guess_number(msg)
+                    line_bot_api.reply_message(event.reply_token, reply_message)
                 elif msg == "統一發票" or msg == "發票":
                     Invoice = getInvoice()
                     line_bot_api.reply_message(
