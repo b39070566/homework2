@@ -7,6 +7,7 @@ import random
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
+from linebot.models import StickerSendMessage
 
 import requests
 from bs4 import BeautifulSoup
@@ -75,7 +76,7 @@ def callback(request):
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
-                elif msg == "統一發票":
+                elif msg == "統一發票" or "發票":
                     invoice = getInvoice()
                     line_bot_api.reply_message(
                         event.reply_token,
