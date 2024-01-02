@@ -19,6 +19,39 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 play_nums = False
 ranums = 0
 
+def getNews(n=10):
+    url = "https://www.cna.com.tw/list/aall.aspx"
+    html = requests.get(url)
+    html.encoding ='uft-8'
+
+    soup = BeautifulSoup(html.text, 'html.parser')
+    # print(soup.title.string.strip())
+    all = soup.find(id='jsMainList').find_all('li')
+
+    rr = ""
+    for idx,i in enumerate(all[:n]):
+        mlink = i.a.get('href')
+        mtext = i.find('h2').text
+        mdate = i.find('div',class_='date').text
+        rr += " ".join((str(idx+1), mdate, mtext, mlink, "\n"))
+    return rr
+
+def getGasolinePrice():
+    url = "https://www2.moeaea.gov.tw/oil111"
+    html = requests.get(url)
+    soup = BeautifulSoup(html.text, 'html.parser')
+    price = soup.find_all("div", class_="grid_tab_content")
+
+    pp = price[1].find_all("strong")
+
+    rr = ""
+    rr += "92 無鉛汽油 " + pp[0].text +" 元/公升\n"
+    rr += "95 無鉛汽油 " + pp[1].text +" 元/公升\n"
+    rr += "98 無鉛汽油 " + pp[2].text +" 元/公升\n"
+    rr += "超級柴油 " + pp[3].text +" 元/公升"
+
+    return rr
+
 def getInvoice():
     url = "https://invoice.etax.nat.gov.tw"
     html = requests.get(url)
@@ -76,10 +109,20 @@ def callback(request):
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
                 elif msg == "統一發票" or msg == "發票":
-                    invoice = getInvoice()
+                    Invoice = getInvoice()
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text=invoice))
+                        TextSendMessage(text=Invoice))
+                elif msg == "油價":
+                    GasolinePrice = getGasolinePrice()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=GasolinePrice))
+                elif msg == "新聞":
+                    News = getNews()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=News))
                 elif msg == "喵喵":
                     line_bot_api.reply_message(
                         event.reply_token,
