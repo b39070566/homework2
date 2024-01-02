@@ -55,10 +55,14 @@ def callback(request):
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
+                elif msg = "喵喵":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        StickerSendMessage(package_id=1, sticker_id=2))
                 else:
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text=event.message.text))
+                        TextSendMessage(text=msg))
 
         return HttpResponse()
     else:
