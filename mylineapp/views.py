@@ -27,9 +27,6 @@ class NumberGuessingGame:
         return TextSendMessage(text="猜數字1-100")
 
     def guess(self, user_input):
-        if not self.playing or not user_input.isdigit():
-            return TextSendMessage(text="請先開始新遊戲")
-
         user_guess = int(user_input)
 
         if user_guess > self.target_number:
@@ -39,7 +36,7 @@ class NumberGuessingGame:
         elif user_guess == self.target_number:
             self.playing = False
             return TextSendMessage(text="猜中了!")
-            
+
 number_guessing_game = NumberGuessingGame()
 
 def getNews(n=10):
@@ -113,7 +110,7 @@ def callback(request):
                 if msg == "猜數字":
                     returned_message = number_guessing_game.start_game()
                     line_bot_api.reply_message(event.reply_token, returned_message)
-                elif msg.isdigit():
+                elif number_guessing_game.playing and msg.isdigit():
                     returned_message = number_guessing_game.guess(msg)
                     line_bot_api.reply_message(event.reply_token, returned_message)
                 elif msg == "統一發票" or msg == "發票":
