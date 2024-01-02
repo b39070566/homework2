@@ -75,7 +75,7 @@ def callback(request):
                             line_bot_api.reply_message(
                                 event.reply_token,
                                 TextSendMessage(text="猜中了!"))
-                elif msg == "統一發票" or "發票":
+                elif msg == "統一發票" or msg == "發票":
                     invoice = getInvoice()
                     line_bot_api.reply_message(
                         event.reply_token,
