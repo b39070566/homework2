@@ -87,6 +87,23 @@ def getNews(n=10):
         rr += " ".join((str(idx+1), mdate, mtext, mlink, "\n"))
     return rr
 
+def getNew2(n=3):
+    url = "https://www.mnd.gov.tw/"
+    html = requests.get(url)
+    html.encoding ='utf-8'
+
+    soup = BeautifulSoup(html.text, 'html.parser')
+    # print(soup.title.string.strip())
+    all = soup.select('#textlb01 ul li')
+
+    rr = ""
+    for idx,i in enumerate(all[:n]):
+        mlink = item.find('a', class_='headline')['href']
+        mtext = item.find('a', class_='headline').text
+        mdate = item.find('div', class_='date').text
+        rr += " ".join((str(idx + 1), mdate, mtext, mlink, "\n"))
+    return rr
+
 def getGasolinePrice():
     url = "https://www2.moeaea.gov.tw/oil111"
     html = requests.get(url)
@@ -165,6 +182,11 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=News))
+                elif msg == "新聞":
+                    News2 = getNews2()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=News2))
                 elif msg == "喵喵":
                     line_bot_api.reply_message(
                         event.reply_token,
