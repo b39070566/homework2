@@ -135,8 +135,7 @@ def callback(request):
                 elif msg == "影片":
                     line_bot_api.reply_message(
                         event.reply_token,
-                        VideoSendMessage(original_content_url='https://drive.google.com/file/d/1GWcE2nbW3CCJrHwtIMcuYv0GEhRu8EBy/view?usp=drive_link',
-                        preview_image_url='https://drive.google.com/file/d/1GWcE2nbW3CCJrHwtIMcuYv0GEhRu8EBy/view?usp=drive_link'))
+                        VideoSendMessage(original_content_url='https://drive.google.com/file/d/1GWcE2nbW3CCJrHwtIMcuYv0GEhRu8EBy/view?usp=drive_link'))
                 elif msg == "林襄":
                     image_urls = [
                         'https://s.yimg.com/ny/api/res/1.2/qGUq9eZftFfkgDwA6J8mcQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTE0NDA7Y2Y9d2VicA--/https://media.zenfs.com/ko/news_tvbs_com_tw_938/0b727f92c662723bd9941fcaac52b5bd',
