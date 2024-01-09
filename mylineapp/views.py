@@ -6,7 +6,7 @@ import random
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage
+from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage, ImageSendMessage
 
 import requests
 from bs4 import BeautifulSoup
@@ -132,6 +132,20 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=1, sticker_id=2))
+                elif msg == "林襄":
+                    image_urls = [
+                        'https://s.yimg.com/ny/api/res/1.2/qGUq9eZftFfkgDwA6J8mcQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTE0NDA7Y2Y9d2VicA--/https://media.zenfs.com/ko/news_tvbs_com_tw_938/0b727f92c662723bd9941fcaac52b5bd',
+                        'https://attach.setn.com/newsimages/2022/09/01/3805758-PH.jpg',
+                        'https://images.chinatimes.com/newsphoto/2023-11-03/1024/20231103003058.jpg',
+                        'https://s.yimg.com/ny/api/res/1.2/H_z17aILl883n2Nz5cxrTA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMQ--/https://media.zenfs.com/zh-tw/setn.com.tw/3ef844aae990f868d9e0fadf19ee72fe',
+                        'https://obs.line-scdn.net/0hMr3CcEnQEl0OOgaykLhtCjZsHiw9XAhULAxcaSw7Hj8hFlZYYQxBPi5uSHFwXgIMLgsObCpqH20gCQULMw/w1200',
+                    ]
+                    selected_image_url = random.choice(image_urls)
+
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        ImageSendMessage(original_content_url=selected_image_url,
+                        preview_image_url=selected_image_url))
                 else:
                     line_bot_api.reply_message(
                         event.reply_token,
