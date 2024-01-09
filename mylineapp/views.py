@@ -16,6 +16,35 @@ from bs4 import BeautifulSoup
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
+class WordGuessingGame:
+    def __init__(self):
+        self.playing = False
+        self.target_word = ""
+
+    def start_game(self):
+        self.playing = True
+        # Replace the word list with your own set of words
+        word_list = ["apple", "banana", "orange", "grape", "kiwi"]
+        self.target_word = random.choice(word_list)
+        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)))
+
+    def guess(self, user_input):
+        if len(user_input) == 1:
+            # Guessing a single letter
+            if user_input in self.target_word:
+                return TextSendMessage(text="正確！{}在單字中".format(user_input))
+            else:
+                return TextSendMessage(text="錯誤！{}不在單字中".format(user_input))
+        elif len(user_input) == len(self.target_word):
+            # Guessing the entire word
+            if user_input == self.target_word:
+                self.playing = False
+                return TextSendMessage(text="猜中了！正確答案是{}".format(self.target_word))
+            else:
+                return TextSendMessage(text="錯誤！猜的單字不正確")
+        else:
+            return TextSendMessage(text="請輸入一個字母或整個單字")
+
 class NumberGuessingGame:
     def __init__(self):
         self.playing = False
@@ -113,6 +142,12 @@ def callback(request):
                 elif number_guessing_game.playing and msg.isdigit():
                     returned_message = number_guessing_game.guess(msg)
                     line_bot_api.reply_message(event.reply_token, returned_message)
+                elif msg == "猜單字":
+                    returned_message = word_guessing_game.start_game()
+                    line_bot_api.reply_message(event.reply_token, returned_message)
+                elif word_guessing_game.playing and msg.isalpha():
+                    returned_message = word_guessing_game.guess(msg.lower())
+                    line_bot_api.reply_message(event.reply_token, returned_message)
                 elif msg == "統一發票" or msg == "發票":
                     Invoice = getInvoice()
                     line_bot_api.reply_message(
@@ -135,7 +170,7 @@ def callback(request):
                 elif msg == "影片":
                     line_bot_api.reply_message(
                         event.reply_token,
-                        VideoSendMessage(original_content_url='vid.mp4',
+                        VideoSendMessage(original_content_url='https://www.youtube.com/embed/AWNKAUQOzXs',
                         preview_image_url='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg/220px-%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg'))
                 elif msg == "林襄":
                     image_urls = [
