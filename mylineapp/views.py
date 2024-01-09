@@ -191,11 +191,6 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=1, sticker_id=2))
-                elif msg == "影片":
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        VideoSendMessage(original_content_url='https://www.youtube.com/embed/AWNKAUQOzXs',
-                        preview_image_url='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg/220px-%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg'))
                 elif msg == "林襄":
                     image_urls = [
                         'https://s.yimg.com/ny/api/res/1.2/qGUq9eZftFfkgDwA6J8mcQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTE0NDA7Y2Y9d2VicA--/https://media.zenfs.com/ko/news_tvbs_com_tw_938/0b727f92c662723bd9941fcaac52b5bd',
