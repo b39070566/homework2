@@ -98,9 +98,9 @@ def getNews2(n=3):
 
     rr = ""
     for idx,i in enumerate(all[:n]):
-        mlink = item.find('a', class_='headline')['href']
-        mtext = item.find('a', class_='headline').text
-        mdate = item.find('div', class_='date').text
+        mlink = i.find('a', class_='headline')['href']
+        mtext = i.find('a', class_='headline').text
+        mdate = i.find('div', class_='date').text
         rr += " ".join((str(idx + 1), mdate, mtext, mlink, "\n"))
     return rr
 
