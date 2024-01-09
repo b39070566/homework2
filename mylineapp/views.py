@@ -135,7 +135,7 @@ def callback(request):
                 elif msg == "影片":
                     line_bot_api.reply_message(
                         event.reply_token,
-                        VideoSendMessage(original_content_url='./vid.mp4',
+                        VideoSendMessage(original_content_url='https://drive.google.com/file/d/1GWcE2nbW3CCJrHwtIMcuYv0GEhRu8EBy/view?usp=drive_link',
                         preview_image_url='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg/220px-%E6%9D%8E%E5%A4%9A%E6%85%A7_%E4%B8%AD%E8%81%B7%E5%85%A8%E6%98%8E%E6%98%9F%E8%B3%BD.jpg'))
                 elif msg == "林襄":
                     image_urls = [
