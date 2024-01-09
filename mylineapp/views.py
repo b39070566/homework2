@@ -45,6 +45,8 @@ class WordGuessingGame:
         else:
             return TextSendMessage(text="請輸入一個字母或整個單字")
 
+word_guessing_game = WordGuessingGame()
+
 class NumberGuessingGame:
     def __init__(self):
         self.playing = False
