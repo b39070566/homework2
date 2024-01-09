@@ -87,7 +87,7 @@ def getNews(n=10):
         rr += " ".join((str(idx+1), mdate, mtext, mlink, "\n"))
     return rr
 
-def getNew2(n=3):
+def getNews2(n=3):
     url = "https://www.mnd.gov.tw/"
     html = requests.get(url)
     html.encoding ='utf-8'
