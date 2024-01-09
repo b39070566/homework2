@@ -6,7 +6,7 @@ import random
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage, ImageSendMessage
+from linebot.models import MessageEvent, TextSendMessage, StickerSendMessage, ImageSendMessage, AudioSendMessage, VideoSendMessage
 
 import requests
 from bs4 import BeautifulSoup
@@ -132,6 +132,11 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=1, sticker_id=2))
+                elif msg == "影片":
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        VideoSendMessage(original_content_url='./vid.mp4',
+                        preview_image_url='./vid.mp4'))
                 elif msg == "林襄":
                     image_urls = [
                         'https://s.yimg.com/ny/api/res/1.2/qGUq9eZftFfkgDwA6J8mcQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTE0NDA7Y2Y9d2VicA--/https://media.zenfs.com/ko/news_tvbs_com_tw_938/0b727f92c662723bd9941fcaac52b5bd',
