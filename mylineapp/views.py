@@ -182,7 +182,7 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=News))
-                elif msg == "新聞":
+                elif msg == "軍事":
                     News2 = getNews2()
                     line_bot_api.reply_message(
                         event.reply_token,
