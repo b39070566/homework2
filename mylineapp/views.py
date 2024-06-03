@@ -168,10 +168,7 @@ def callback(request):
 
                 elif msg == "猜單字":
                     returned_message = word_guessing_game.start_game()
-                    hint_message = TextSendMessage(text="提示: 水果")
-                    returned_list = [returned_message,hint_message]
-                    for messages in returned_list:
-                        line_bot_api.reply_message(event.reply_token, messages)
+                    line_bot_api.reply_message(event.reply_token, returned_message)
 
                 elif word_guessing_game.playing and msg.isalpha():
                     returned_message = word_guessing_game.guess(msg.lower())
