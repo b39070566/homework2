@@ -26,7 +26,7 @@ class WordGuessingGame:
         # Replace the word list with your own set of words
         word_list = ["apple", "banana", "orange", "grape", "kiwi"]
         self.target_word = random.choice(word_list)
-        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字 提示: 水果".format(len(self.target_word)))
+        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)))
 
 
     def guess(self, user_input):
@@ -168,7 +168,10 @@ def callback(request):
 
                 elif msg == "猜單字":
                     returned_message = word_guessing_game.start_game()
-                    line_bot_api.reply_message(event.reply_token, returned_message)
+                    hint_message = TextSendMessage(text="提示: 水果")
+                    returned_list = [returned_message,hint_message]
+                    for messages in returned_list:
+                        line_bot_api.reply_message(event.reply_token, messages)
 
                 elif word_guessing_game.playing and msg.isalpha():
                     returned_message = word_guessing_game.guess(msg.lower())
