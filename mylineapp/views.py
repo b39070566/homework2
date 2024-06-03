@@ -26,7 +26,7 @@ class WordGuessingGame:
         # Replace the word list with your own set of words
         word_list = ["apple", "banana", "orange", "grape", "kiwi"]
         self.target_word = random.choice(word_list)
-        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字，提示:水果英文".format(len(self.target_word)))
+        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)))
 
     def guess(self, user_input):
         if len(user_input) == 1:
@@ -68,6 +68,7 @@ class NumberGuessingGame:
             return TextSendMessage(text="大一點")
         elif user_guess == self.target_number:
             self.playing = False
+            self.counting_number = 0
             return TextSendMessage(text="猜中了! 你總共猜了{}次".format(self.counting_number))
 
 number_guessing_game = NumberGuessingGame()
@@ -160,39 +161,51 @@ def callback(request):
                 if msg == "猜數字":
                     returned_message = number_guessing_game.start_game()
                     line_bot_api.reply_message(event.reply_token, returned_message)
+
                 elif number_guessing_game.playing and msg.isdigit():
                     returned_message = number_guessing_game.guess(msg)
                     line_bot_api.reply_message(event.reply_token, returned_message)
+
                 elif msg == "猜單字":
                     returned_message = word_guessing_game.start_game()
-                    line_bot_api.reply_message(event.reply_token, returned_message)
+                    hint_message = TextSendMessage(text="提示: 水果")
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(event.reply_token, [returned_message, hint_message]))
+
                 elif word_guessing_game.playing and msg.isalpha():
                     returned_message = word_guessing_game.guess(msg.lower())
                     line_bot_api.reply_message(event.reply_token, returned_message)
+
                 elif msg == "統一發票" or msg == "發票":
                     Invoice = getInvoice()
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=Invoice))
+
                 elif msg == "油價":
                     GasolinePrice = getGasolinePrice()
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=GasolinePrice))
+                        
                 elif msg == "新聞":
                     News = getNews()
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=News))
+
                 elif msg == "軍事":
                     News2 = getNews2()
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=News2))
+
                 elif msg == "喵喵":
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=1, sticker_id=2))
+
                 elif msg == "林襄":
                     image_urls = [
                         'https://s.yimg.com/ny/api/res/1.2/qGUq9eZftFfkgDwA6J8mcQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTE0NDA7Y2Y9d2VicA--/https://media.zenfs.com/ko/news_tvbs_com_tw_938/0b727f92c662723bd9941fcaac52b5bd',
