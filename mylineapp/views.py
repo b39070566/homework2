@@ -20,14 +20,14 @@ class WordGuessingGame:
     def __init__(self):
         self.playing = False
         self.target_word = ""
-        self.hint_message = TextSendMessage(text="提示: 水果")
 
     def start_game(self):
         self.playing = True
         # Replace the word list with your own set of words
         word_list = ["apple", "banana", "orange", "grape", "kiwi"]
         self.target_word = random.choice(word_list)
-        return TextSendMessage([text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)),self.hint_message])
+        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字 提示: 水果".format(len(self.target_word)))
+
 
     def guess(self, user_input):
         if len(user_input) == 1:
