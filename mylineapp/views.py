@@ -26,7 +26,7 @@ class WordGuessingGame:
         # Replace the word list with your own set of words
         word_list = ["apple", "banana", "orange", "grape", "kiwi"]
         self.target_word = random.choice(word_list)
-        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)))
+        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字，提示:水果英文".format(len(self.target_word)))
 
     def guess(self, user_input):
         if len(user_input) == 1:
@@ -51,6 +51,7 @@ class NumberGuessingGame:
     def __init__(self):
         self.playing = False
         self.target_number = 0
+        self.counting_number = 0
 
     def start_game(self):
         self.playing = True
@@ -59,6 +60,7 @@ class NumberGuessingGame:
 
     def guess(self, user_input):
         user_guess = int(user_input)
+        self.counting_number += 1
 
         if user_guess > self.target_number:
             return TextSendMessage(text="小一點")
@@ -66,7 +68,7 @@ class NumberGuessingGame:
             return TextSendMessage(text="大一點")
         elif user_guess == self.target_number:
             self.playing = False
-            return TextSendMessage(text="猜中了!")
+            return TextSendMessage(text="猜中了! 你總共猜了{}次".format(self.counting_number))
 
 number_guessing_game = NumberGuessingGame()
 
