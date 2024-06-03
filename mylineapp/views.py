@@ -20,13 +20,14 @@ class WordGuessingGame:
     def __init__(self):
         self.playing = False
         self.target_word = ""
+        self.hint_message = TextSendMessage(text="提示: 水果")
 
     def start_game(self):
         self.playing = True
         # Replace the word list with your own set of words
         word_list = ["apple", "banana", "orange", "grape", "kiwi"]
         self.target_word = random.choice(word_list)
-        return TextSendMessage(text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)))
+        return TextSendMessage([text="猜單字，詞的長度為{}個字母，請輸入一個字母或整個單字".format(len(self.target_word)),self.hint_message])
 
     def guess(self, user_input):
         if len(user_input) == 1:
@@ -55,20 +56,19 @@ class NumberGuessingGame:
 
     def start_game(self):
         self.playing = True
+        self.counting_number = 0
         self.target_number = random.randint(1, 100)
         return TextSendMessage(text="猜數字1-100")
 
     def guess(self, user_input):
         user_guess = int(user_input)
         self.counting_number += 1
-
         if user_guess > self.target_number:
             return TextSendMessage(text="小一點")
         elif user_guess < self.target_number:
             return TextSendMessage(text="大一點")
         elif user_guess == self.target_number:
             self.playing = False
-            self.counting_number = 0
             return TextSendMessage(text="猜中了! 你總共猜了{}次".format(self.counting_number))
 
 number_guessing_game = NumberGuessingGame()
@@ -168,10 +168,7 @@ def callback(request):
 
                 elif msg == "猜單字":
                     returned_message = word_guessing_game.start_game()
-                    hint_message = TextSendMessage(text="提示: 水果")
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(event.reply_token, [returned_message, hint_message]))
+                    line_bot_api.reply_message(event.reply_token, returned_message)
 
                 elif word_guessing_game.playing and msg.isalpha():
                     returned_message = word_guessing_game.guess(msg.lower())
