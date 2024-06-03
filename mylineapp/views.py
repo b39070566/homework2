@@ -55,8 +55,8 @@ class NumberGuessingGame:
         self.counting_number = 0
 
     def start_game(self):
-        self.playing = True
         self.counting_number = 0
+        self.playing = True
         self.target_number = random.randint(1, 100)
         return TextSendMessage(text="猜數字1-100")
 
